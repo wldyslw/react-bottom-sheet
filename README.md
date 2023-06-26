@@ -1,5 +1,9 @@
 # React Bottom Sheet Component
 
+![npm (scoped)](https://img.shields.io/npm/v/%40wldyslw/react-bottom-sheet)
+![npm bundle size (scoped)](https://img.shields.io/bundlephobia/min/%40wldyslw/react-bottom-sheet)
+![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/%40wldyslw/react-bottom-sheet)
+
 -   ⚡️ **PERFORMANT**: every motion is done purely with CSS transforms, providing near-native UX.
 -   🪶 **LIGHTWEIGHT**: **~36kb** uncompressed, **~11kb** gziped. **0 dependencies**.
 -   🧘 **MINIMALISTIC**: nothing redundant, yet everything you may need.
