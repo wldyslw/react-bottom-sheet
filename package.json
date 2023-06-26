@@ -1,6 +1,6 @@
 {
     "name": "@wldyslw/react-bottom-sheet",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "type": "module",
     "scripts": {
         "dev": "vite",
@@ -21,6 +21,7 @@
             "require": "./lib/react-bottom-sheet.umd.cjs"
         }
     },
+    "types": "./lib/react-bottom-sheet.d.ts",
     "peerDependencies": {
         "react": "^17.0.0 || ^18.0.0",
         "react-dom": "^17.0.0 || ^18.0.0"
