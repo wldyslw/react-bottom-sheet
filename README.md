@@ -3,6 +3,7 @@
 -   ⚡️ **PERFORMANT**: every motion is done purely with CSS transforms, providing near-native UX.
 -   🪶 **LIGHTWEIGHT**: **~36kb** uncompressed, **~11kb** gziped. **0 dependencies**.
 -   🧘 **MINIMALISTIC**: nothing redundant, yet everything you may need.
+-   ⚙️ **TYPED**: writen in TypeScript, so `.d.ts` file with prop and ref types included.
 
 # Getting Started
 

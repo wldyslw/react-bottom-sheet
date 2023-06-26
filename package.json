@@ -1,6 +1,31 @@
 {
     "name": "@wldyslw/react-bottom-sheet",
-    "version": "0.1.1",
+    "version": "0.1.2",
+    "author": {
+        "name": "Uladzislau Maltsau",
+        "email": "wldyslw@outlook.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/wldyslw/react-bottom-sheet"
+    },
+    "bugs": {
+        "url": "https://github.com/wldyslw/react-bottom-sheet/issues"
+    },
+    "keywords": [
+        "react",
+        "sheet",
+        "bottom-sheet",
+        "bottomsheet",
+        "drawer",
+        "popup",
+        "modal",
+        "gesture",
+        "ux",
+        "vite",
+        "tailwindcss",
+        "pnpm"
+    ],
     "type": "module",
     "scripts": {
         "dev": "vite",
