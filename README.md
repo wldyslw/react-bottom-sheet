@@ -1,8 +1,8 @@
 # React Bottom Sheet Component
 
--   ⚡️ **PERFORMANT**: every motion is done purely with CSS transforms, providing near-native UX
--   🪶 **LIGHTWEIGHT**: ~36kb uncompressed, ~11kb gziped
--   🧘 **MINIMALISTIC**: nothing redundant, yet everything you may need
+-   ⚡️ **PERFORMANT**: every motion is done purely with CSS transforms, providing near-native UX.
+-   🪶 **LIGHTWEIGHT**: **~36kb** uncompressed, **~11kb** gziped. **0 dependencies**.
+-   🧘 **MINIMALISTIC**: nothing redundant, yet everything you may need.
 
 # Getting Started
 
