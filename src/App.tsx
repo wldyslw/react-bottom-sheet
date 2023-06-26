@@ -1,10 +1,10 @@
-import { useCallback, useRef } from 'react';
-import BottomSheet, { SheetRef } from '../lib/BottomSheet';
+import { useRef, useState } from 'react';
+import { useControls, button } from 'leva';
+import BottomSheet, { BottomSheetRef } from './BottomSheet/BottomSheet';
 import './index.css';
 
 const text = [
-    `
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+    `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
     eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu
     facilisis sed odio morbi quis. Bibendum at varius vel pharetra
     vel turpis nunc eget lorem. Pellentesque adipiscing commodo elit
@@ -59,29 +59,66 @@ const text = [
     libero. Nunc eget lorem dolor sed viverra. Gravida quis blandit
     turpis cursus. Volutpat sed cras ornare arcu dui vivamus arcu
     felis bibendum. Cursus risus at ultrices mi tempus. Sed
-    ullamcorper morbi tincidunt ornare massa eget.
-`,
+    ullamcorper morbi tincidunt ornare massa eget.`,
 ];
 
-function App() {
-    const sheetRef = useRef<SheetRef | null>(null);
+const defaultDetents = ['50%', '97%'];
 
-    const openSheet = useCallback(() => {
-        sheetRef.current?.open();
-    }, []);
+function App() {
+    const sheetRef = useRef<BottomSheetRef | null>(null);
+    const [parsedDetents, setParsedDetents] = useState(defaultDetents);
+
+    const {
+        permanent,
+        expansionSwitchThreshold,
+        largestUndimmedDetentIndex,
+        grabberVisible,
+    } = useControls({
+        permanent: {
+            value: false,
+        },
+        grabberVisible: {
+            value: false,
+        },
+        expansionSwitchThreshold: {
+            value: 50,
+            min: 30,
+            max: 200,
+        },
+        largestUndimmedDetentIndex: {
+            value: -1,
+            min: -1,
+            max: 5,
+            step: 1,
+        },
+        detents: {
+            value: JSON.stringify(defaultDetents),
+            onChange(v: string) {
+                try {
+                    setParsedDetents(JSON.parse(v.replace("'", '"')));
+                } catch {
+                    //
+                }
+            },
+        },
+        'Open Sheet': button(() => {
+            sheetRef.current?.open();
+        }),
+    });
 
     return (
-        <div className="p-2">
-            <button
-                className="my-2 rounded bg-zinc-300 p-2"
-                onClick={openSheet}
+        <div className="h-[200vh] p-2">
+            <BottomSheet
+                ref={sheetRef}
+                detents={parsedDetents}
+                expansionSwitchThreshold={expansionSwitchThreshold}
+                largestUndimmedDetentIndex={largestUndimmedDetentIndex}
+                permanent={permanent}
+                grabberVisible={grabberVisible}
             >
-                Open sheet
-            </button>
-            <div></div>
-            {text}
-            <BottomSheet ref={sheetRef}>
-                <div className="">{text}</div>
+                <div className="px-3">
+                    <p>{text}</p>
+                </div>
             </BottomSheet>
         </div>
     );

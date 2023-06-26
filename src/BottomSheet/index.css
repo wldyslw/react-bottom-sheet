@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bottom-sheet::after {
+    @apply absolute inset-x-0 h-screen bg-white;
+    content: '';
+    bottom: -100vh;
+}
+
+.bottom-sheet-transform {
+    transition-property: transform, bottom, height;
+    transition-timing-function: ease-out;
+    transition-duration: 300ms;
+}
