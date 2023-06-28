@@ -9,7 +9,12 @@
 }
 
 .bottom-sheet-transform {
-    transition-property: transform, bottom, height;
-    transition-timing-function: ease-out;
+    transition-property: transform, margin-bottom, padding-bottom;
+    transition-timing-function: cubic-bezier(
+        0.25,
+        0.46,
+        0.45,
+        0.94
+    ); /* ease-out quadratic (based on power of two) */
     transition-duration: 300ms;
 }

@@ -1,5 +1,4 @@
-import { useRef, useState } from 'react';
-import { useControls, button } from 'leva';
+import { useRef } from 'react';
 import BottomSheet, { BottomSheetRef } from './BottomSheet/BottomSheet';
 import './index.css';
 
@@ -62,60 +61,14 @@ const text = [
     ullamcorper morbi tincidunt ornare massa eget.`,
 ];
 
-const defaultDetents = ['50%', '97%'];
-
 function App() {
     const sheetRef = useRef<BottomSheetRef | null>(null);
-    const [parsedDetents, setParsedDetents] = useState(defaultDetents);
-
-    const {
-        permanent,
-        expansionSwitchThreshold,
-        largestUndimmedDetentIndex,
-        grabberVisible,
-    } = useControls({
-        permanent: {
-            value: false,
-        },
-        grabberVisible: {
-            value: false,
-        },
-        expansionSwitchThreshold: {
-            value: 50,
-            min: 30,
-            max: 200,
-        },
-        largestUndimmedDetentIndex: {
-            value: -1,
-            min: -1,
-            max: 5,
-            step: 1,
-        },
-        detents: {
-            value: JSON.stringify(defaultDetents),
-            onChange(v: string) {
-                try {
-                    setParsedDetents(JSON.parse(v.replace("'", '"')));
-                } catch {
-                    //
-                }
-            },
-        },
-        'Open Sheet': button(() => {
-            sheetRef.current?.open();
-        }),
-    });
 
     return (
         <div className="h-[200vh] p-2">
-            <BottomSheet
-                ref={sheetRef}
-                detents={parsedDetents}
-                expansionSwitchThreshold={expansionSwitchThreshold}
-                largestUndimmedDetentIndex={largestUndimmedDetentIndex}
-                permanent={permanent}
-                grabberVisible={grabberVisible}
-            >
+            <button onClick={() => sheetRef.current?.open()}>Open Sheet</button>
+
+            <BottomSheet ref={sheetRef}>
                 <div className="px-3">
                     <p>{text}</p>
                 </div>

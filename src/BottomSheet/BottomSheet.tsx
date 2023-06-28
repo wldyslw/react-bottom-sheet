@@ -5,6 +5,7 @@ import {
     useCallback,
     useRef,
     type TouchEvent,
+    type PointerEvent,
     type ReactNode,
     useImperativeHandle,
     useLayoutEffect,
@@ -15,7 +16,7 @@ import { createPortal } from 'react-dom';
 import throttle from './throttle';
 import './index.css';
 
-export type BottomSheetRef = {
+export interface BottomSheetRef {
     /**
      * Reference to the DOM node which holds sheet's children
      */
@@ -40,9 +41,9 @@ export type BottomSheetRef = {
      * Collapses sheet one detent down
      */
     collapse: () => void;
-};
+}
 
-export type BottomSheetProps = {
+export interface BottomSheetProps {
     /**
      * Sheet's content
      */
@@ -61,7 +62,7 @@ export type BottomSheetProps = {
      *
      * @default ["50%", "97%"]
      */
-    detents?: (string | number)[];
+    detents?: Array<string | number>;
     /**
      * The largest detent's index that doesn’t dim the view underneath the sheet.
      * Default value is `-1` which means that dim is always enabled.
@@ -84,10 +85,13 @@ export type BottomSheetProps = {
     permanent?: boolean;
     /**
      * A Boolean value that determines whether the sheet shows a grabber at the top.
+     *
+     * NOTE: while this component is generally developed for mobile experiences,
+     * it's also possible to drag grabber on desktops to expand/collapse sheet.
      * @default false
      */
     grabberVisible?: boolean;
-};
+}
 
 const defaultDetents = ['50%', '97%'];
 
@@ -111,7 +115,7 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
         expansionSwitchThreshold = 50,
         permanent = false,
         grabberVisible = false,
-    },
+    }: BottomSheetProps,
     ref
 ) {
     const [currentDetentIndex, setCurrentDetendIndex] = useState(0);
@@ -168,17 +172,17 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
         }
     }, [permanent]);
 
-    const handleTouchStart = useCallback((e: TouchEvent) => {
+    const handleGestureStart = useCallback((y: number) => {
         const scrollTop = scrollContainerRef.current?.scrollTop;
         if (scrollTop !== undefined && scrollTop <= 0) {
-            setOrigin(e.touches[0].pageY);
+            setOrigin(y);
         }
     }, []);
 
-    const handleTouchMove = useCallback(
-        (e: TouchEvent) => {
+    const handleGestureMove = useCallback(
+        (y: number) => {
             if (origin !== null) {
-                const delta = e.touches[0].pageY - origin;
+                const delta = y - origin;
                 const isSingleDetent = parsedDetents.length === 1;
                 if (isSingleDetent) {
                     setTransform(
@@ -204,7 +208,7 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
         ]
     );
 
-    const handleTouchEnd = useCallback(() => {
+    const handleGestureEnd = useCallback(() => {
         if (transform > expansionSwitchThreshold) {
             if (!permanent && isSmallestDetent) {
                 open(false);
@@ -219,10 +223,38 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
         setTransform(0);
     }, [expansionSwitchThreshold, isSmallestDetent, permanent, transform]);
 
-    const handleTouchCancel = useCallback(() => {
+    const handleGestureCancel = useCallback(() => {
         setOrigin(null);
         setTransform(0);
     }, []);
+
+    const handleTouchStart = useCallback(
+        (e: TouchEvent) => {
+            const y = e.touches[0].pageY;
+            handleGestureStart(y);
+        },
+        [handleGestureStart]
+    );
+    const handleTouchMove = useCallback(
+        (e: TouchEvent) => {
+            const y = e.touches[0].pageY;
+            handleGestureMove(y);
+        },
+        [handleGestureMove]
+    );
+
+    const handlePointerDown = useCallback(
+        (e: PointerEvent) => {
+            handleGestureStart(e.clientY);
+        },
+        [handleGestureStart]
+    );
+    const handlePointerMove = useCallback(
+        (e: PointerEvent) => {
+            handleGestureMove(e.clientY);
+        },
+        [handleGestureMove]
+    );
 
     useImperativeHandle(
         ref,
@@ -236,23 +268,29 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
                     open(false);
                 },
                 expand() {
-                    setCurrentDetendIndex((v) => v + 1);
+                    setCurrentDetendIndex((v) =>
+                        v < parsedDetents.length - 1 ? v + 1 : v
+                    );
                 },
                 expandToIndex(i) {
                     setCurrentDetendIndex(i);
                 },
                 collapse() {
-                    setCurrentDetendIndex((v) => v - 1);
+                    setCurrentDetendIndex((v) => (v > 0 ? v - 1 : v));
                 },
             };
         },
-        []
+        [parsedDetents.length]
     );
+
+    const resultingTransform = transform + (opened ? -currentDetent : 0);
 
     return createPortal(
         <div
             ref={sheetContainerRef}
             className="pointer-events-none fixed overflow-hidden overscroll-none"
+            onPointerMove={handlePointerMove}
+            onPointerUp={handleGestureEnd}
         >
             <div
                 id="dim"
@@ -271,29 +309,35 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
                     // height: Math.abs(transform) > 0 ? 'auto' : `${largetsDetent}px`,
                     height: `${largetsDetent}px`,
                     bottom: 0,
-                    transform: `translate3d(0, calc(100% + ${
-                        transform + (opened ? -currentDetent : 0)
-                    }px), 0)`,
+                    transform: `translate3d(0, calc(100% + ${resultingTransform}px), 0)`,
                 }}
                 className={`${
                     transform === 0 ? 'bottom-sheet-transform' : ''
-                } bottom-sheet pointer-events-auto fixed inset-x-0 mx-auto flex w-full max-w-3xl shrink-0 flex-col rounded-t-2xl bg-white drop-shadow-xl backdrop-blur-md will-change-transform ${className}`}
+                } pointer-events-auto fixed inset-x-0 mx-auto flex w-full max-w-3xl shrink-0 flex-col rounded-t-2xl bg-white drop-shadow-xl will-change-transform ${className}`}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-                onTouchCancel={handleTouchCancel}
+                onTouchEnd={handleGestureEnd}
+                onTouchCancel={handleGestureCancel}
             >
                 <div
                     id="bottom-sheet-grabber"
                     className={`${
                         grabberVisible ? 'flex' : 'hidden'
                     } shrink-0 cursor-ns-resize touch-none justify-center py-3`}
+                    onPointerDown={handlePointerDown}
+                    onPointerCancel={handleGestureCancel}
                 >
                     <span className="h-1 w-8 rounded-full bg-zinc-950/20"></span>
                 </div>
                 <div
+                    style={{
+                        marginBottom: `${largetsDetent + resultingTransform}px`,
+                    }}
                     ref={scrollContainerRef}
-                    className={`h-full ${grabberVisible ? '' : 'pt-3'} ${
+                    // TODO: apply bottom-sheet-transform only when sheet is collapsing
+                    className={`${
+                        transform === 0 ? 'bottom-sheet-transform' : ''
+                    } h-full ${grabberVisible ? '' : 'pt-3'} ${
                         transform !== 0
                             ? 'overscroll-none'
                             : 'overscroll-contain'

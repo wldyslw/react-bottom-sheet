@@ -1,6 +1,6 @@
 {
     "name": "@wldyslw/react-bottom-sheet",
-    "version": "0.1.2",
+    "version": "0.2.0",
     "author": {
         "name": "Uladzislau Maltsau",
         "email": "wldyslw@outlook.com"
@@ -28,15 +28,14 @@
     ],
     "type": "module",
     "scripts": {
-        "dev": "vite",
         "build": "tsc && vite build",
-        "pages": "tsc && vite build -c ./vite.pages-config.ts",
-        "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-        "preview": "vite preview"
+        "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
     },
     "files": [
         "lib",
-        "README.md"
+        "src",
+        "README.md",
+        "LICENSE"
     ],
     "main": "./lib/react-bottom-sheet.umd.cjs",
     "module": "./lib/react-bottom-sheet.js",
@@ -63,12 +62,9 @@
         "eslint-plugin-react-hooks": "^4.6.0",
         "eslint-plugin-react-refresh": "^0.3.4",
         "eslint-plugin-tailwindcss": "^3.12.1",
-        "leva": "^0.9.35",
         "postcss": "^8.4.24",
         "prettier-plugin-tailwindcss": "^0.3.0",
         "tailwindcss": "^3.3.2",
-        "typedoc": "^0.24.8",
-        "typedoc-plugin-markdown": "^3.15.3",
         "typescript": "^5.0.2",
         "vite": "^4.3.9",
         "vite-plugin-dts": "^2.3.0"

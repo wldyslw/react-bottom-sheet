@@ -9,6 +9,14 @@ export default defineConfig({
     esbuild: {
         jsxDev: false,
     },
+    resolve: {
+        alias: [
+            {
+                find: '@',
+                replacement: resolve(__dirname, 'src'),
+            },
+        ],
+    },
     build: {
         outDir: 'lib',
         sourcemap: true,
