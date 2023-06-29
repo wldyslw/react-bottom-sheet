@@ -6,9 +6,6 @@ import react from '@vitejs/plugin-react-swc';
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [react(), dts({ rollupTypes: true, insertTypesEntry: true })],
-    esbuild: {
-        jsxDev: false,
-    },
     resolve: {
         alias: [
             {
@@ -20,7 +17,6 @@ export default defineConfig({
     build: {
         outDir: 'lib',
         sourcemap: true,
-        target: 'esnext',
         lib: {
             name: 'BottomSheet',
             fileName: 'react-bottom-sheet',

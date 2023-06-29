@@ -28,6 +28,7 @@
     ],
     "type": "module",
     "scripts": {
+        "dev": "vite",
         "build": "tsc && vite build",
         "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
     },
@@ -51,23 +52,27 @@
         "react-dom": "^17.0.0 || ^18.0.0"
     },
     "devDependencies": {
-        "@types/node": "^20.3.1",
-        "@types/react": "^18.0.37",
-        "@types/react-dom": "^18.0.11",
-        "@typescript-eslint/eslint-plugin": "^5.59.0",
-        "@typescript-eslint/parser": "^5.59.0",
-        "@vitejs/plugin-react-swc": "^3.0.0",
+        "@types/node": "^20.3.2",
+        "@types/react": "^18.2.14",
+        "@types/react-dom": "^18.2.6",
+        "@typescript-eslint/eslint-plugin": "^5.60.1",
+        "@typescript-eslint/parser": "^5.60.1",
+        "@vitejs/plugin-react-swc": "^3.3.2",
         "autoprefixer": "^10.4.14",
-        "eslint": "^8.38.0",
+        "eslint": "^8.43.0",
         "eslint-plugin-react-hooks": "^4.6.0",
-        "eslint-plugin-react-refresh": "^0.3.4",
-        "eslint-plugin-tailwindcss": "^3.12.1",
+        "eslint-plugin-react-refresh": "^0.3.5",
+        "eslint-plugin-tailwindcss": "^3.13.0",
         "postcss": "^8.4.24",
         "prettier-plugin-tailwindcss": "^0.3.0",
         "tailwindcss": "^3.3.2",
-        "typescript": "^5.0.2",
+        "typescript": "^5.1.6",
         "vite": "^4.3.9",
         "vite-plugin-dts": "^2.3.0"
     },
+    "browserslist": [
+        "defaults and supports es6-module",
+        "maintained node versions"
+    ],
     "sideEffects": false
 }

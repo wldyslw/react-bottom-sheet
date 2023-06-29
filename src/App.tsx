@@ -65,11 +65,33 @@ function App() {
     const sheetRef = useRef<BottomSheetRef | null>(null);
 
     return (
-        <div className="h-[200vh] p-2">
-            <button onClick={() => sheetRef.current?.open()}>Open Sheet</button>
-
-            <BottomSheet ref={sheetRef}>
-                <div className="px-3">
+        <div className="flex h-screen items-center justify-center">
+            <button
+                className="block rounded bg-blue-500 px-3 py-2 text-white drop-shadow-md"
+                onClick={() => sheetRef.current?.open()}
+            >
+                Open Sheet
+            </button>
+            <BottomSheet ref={sheetRef} grabberVisible>
+                <div
+                    id="header"
+                    className="sticky inset-x-0 top-0 flex items-baseline justify-between bg-white/90 px-4"
+                >
+                    <button
+                        onClick={() => sheetRef.current?.collapse()}
+                        className="text-blue-500"
+                    >
+                        Collapse
+                    </button>
+                    <h1 className="mb-2 text-xl font-bold">Bottom Sheet</h1>
+                    <button
+                        onClick={() => sheetRef.current?.expand()}
+                        className="text-blue-500"
+                    >
+                        Expand
+                    </button>
+                </div>
+                <div id="content" className="px-4">
                     <p>{text}</p>
                 </div>
             </BottomSheet>
