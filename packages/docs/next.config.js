@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const nextra = require('nextra');
 
 const withNextra = nextra({
@@ -5,4 +6,12 @@ const withNextra = nextra({
     themeConfig: './theme.config.tsx',
 });
 
-module.exports = withNextra();
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    output: 'export',
+    images: {
+        unoptimized: true,
+    },
+};
+
+module.exports = withNextra(nextConfig);

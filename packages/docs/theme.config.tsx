@@ -17,7 +17,8 @@ const config: DocsThemeConfig = {
     project: {
         link: 'https://github.com/wldyslw/react-bottom-sheet',
     },
-    docsRepositoryBase: 'https://github.com/wldyslw/react-bottom-sheet',
+    docsRepositoryBase:
+        'https://github.com/wldyslw/react-bottom-sheet/tree/main/packages/docs',
     footer: {
         text: '@wldyslw/react-bottom-sheet | Built with Nextra',
     },
