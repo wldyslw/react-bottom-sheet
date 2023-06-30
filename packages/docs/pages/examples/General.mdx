@@ -1,0 +1,84 @@
+# General Example
+
+Above is more advanced example
+
+import GeneralExample from '@components/GeneralExample';
+
+<GeneralExample />
+
+## Example's code
+
+```jsx filename="BottomSheetWrapper.tsx"
+// https://github.com/wldyslw/react-bottom-sheet/issues/4
+import { type Ref } from 'react';
+import BottomSheet, {
+    type BottomSheetRef,
+    type BottomSheetProps,
+} from '@wldyslw/react-bottom-sheet';
+import '@wldyslw/react-bottom-sheet/lib/style.css';
+
+const BottomSheetWrapper = ({
+    sheetRef,
+    ...props
+}: BottomSheetProps & { sheetRef?: Ref<BottomSheetRef> }) => {
+    return <BottomSheet {...props} ref={sheetRef} />;
+};
+
+export default BottomSheetWrapper;
+```
+
+```jsx filename="App.tsx"
+import dynamic from 'next/dynamic';
+import { useRef } from 'react';
+import { type BottomSheetRef } from '@wldyslw/react-bottom-sheet';
+
+// https://github.com/wldyslw/react-bottom-sheet/issues/4
+const DynamicSheet = dynamic(() => import('./BottomSheetWrapper'), {
+    ssr: false,
+});
+
+function General() {
+    const sheetRef = (useRef < BottomSheetRef) | (null > null);
+
+    return (
+        <div className="flex items-center justify-center py-4">
+            <button
+                className="block rounded bg-blue-500 px-3 py-2 text-white drop-shadow-md"
+                onClick={() => {
+                    sheetRef.current.open();
+                }}
+            >
+                Open Sheet
+            </button>
+            <DynamicSheet
+                sheetRef={sheetRef}
+                grabberVisible
+                detents={['50%', '90%']}
+                className="dark:bg-zinc-800"
+            >
+                <div
+                    id="header"
+                    className="sticky inset-x-0 top-0 flex items-baseline justify-between bg-white/90 px-4 dark:bg-zinc-800/90"
+                >
+                    <button
+                        onClick={() => sheetRef.current?.collapse()}
+                        className="text-blue-500"
+                    >
+                        Collapse
+                    </button>
+                    <h1 className="mb-2 text-xl font-bold">Bottom Sheet</h1>
+                    <button
+                        onClick={() => sheetRef.current?.expand()}
+                        className="text-blue-500"
+                    >
+                        Expand
+                    </button>
+                </div>
+                <div id="content" className="px-4">
+                    <p>{text}</p>
+                </div>
+            </DynamicSheet>
+        </div>
+    );
+}
+```

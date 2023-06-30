@@ -11,8 +11,8 @@ node_modules
 dist
 dist-ssr
 lib
-pages
 doc
+.next
 *.local
 
 # Editor directories and files

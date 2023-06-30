@@ -1,0 +1,58 @@
+import { Tab, Tabs } from 'nextra-theme-docs';
+
+# React Bottom Sheet Component
+
+<div className="inline-img">
+    ![npm (scoped)](https://img.shields.io/npm/v/%40wldyslw/react-bottom-sheet)
+    ![npm bundle size
+    (scoped)](https://img.shields.io/bundlephobia/min/%40wldyslw/react-bottom-sheet)
+    ![npm bundle size
+    (scoped)](https://img.shields.io/bundlephobia/minzip/%40wldyslw/react-bottom-sheet)
+</div>
+
+-   ⚡️ **PERFORMANT**: every motion is done purely with CSS transforms, providing near-native UX.
+-   🪶 **LIGHTWEIGHT**: **~36kb** uncompressed, **~11kb** gziped. **0 dependencies**.
+-   🧘 **MINIMALISTIC**: nothing redundant, yet everything you may need.
+-   ⚙️ **TYPED**: writen in TypeScript, so `.d.ts` file with prop and ref types included.
+
+# Getting Started
+
+1. Install the package:
+
+{/* prettier-ignore */}
+<Tabs items={['pnpm', 'npm', 'yarn']}>
+  <Tab>
+    ```sh
+    pnpm i -P @wldyslw/react-bottom-sheet
+    ```
+  </Tab>
+  <Tab>
+    ```sh
+    npm i -P @wldyslw/react-bottom-sheet
+    ```
+  </Tab>
+  <Tab>
+    ```sh
+    yarn add -P @wldyslw/react-bottom-sheet
+    ```
+  </Tab>
+</Tabs>
+
+2. Use it:
+
+```js
+import { useRef } from 'react';
+import BottomSheet from '@wldyslw/react-bottom-sheet';
+import '@wldyslw/react-bottom-sheet/lib/style.css'; // don't forget styles!
+
+function App() {
+    const sheetRef = useRef(null);
+
+    return (
+        <>
+            <button onClick={() => sheetRef.current?.open()}>Open Sheet</button>
+            <BottomSheet ref={sheetRef}>Hello!</BottomSheet>
+        </>
+    );
+}
+```

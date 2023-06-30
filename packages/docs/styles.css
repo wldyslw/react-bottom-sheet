@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:is(.dark) #bottom-sheet-grabber span {
+    @apply bg-zinc-600;
+}
+
+#bottom-sheet-container {
+    z-index: 10;
+}
+
+.inline-img img {
+    display: inline-block;
+}

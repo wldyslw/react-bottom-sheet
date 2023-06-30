@@ -288,12 +288,13 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
     return createPortal(
         <div
             ref={sheetContainerRef}
+            id="bottom-sheet-container"
             className="pointer-events-none fixed overflow-hidden overscroll-none"
             onPointerMove={handlePointerMove}
             onPointerUp={handleGestureEnd}
         >
             <div
-                id="dim"
+                id="bottom-sheet-dim"
                 onPointerDown={handleDissmiss}
                 className={`${
                     opened && currentDetentIndex > largestUndimmedDetentIndex
@@ -330,6 +331,7 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
                     <span className="h-1 w-8 rounded-full bg-zinc-950/20"></span>
                 </div>
                 <div
+                    id="bottom-sheet-content"
                     style={{
                         marginBottom: `${largetsDetent + resultingTransform}px`,
                     }}
