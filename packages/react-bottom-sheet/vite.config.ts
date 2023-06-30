@@ -23,11 +23,12 @@ export default defineConfig({
             entry: resolve(__dirname, 'src/BottomSheet/main.ts'),
         },
         rollupOptions: {
-            external: ['react', 'react-dom'],
+            external: ['react', 'react/jsx-runtime', 'react-dom'],
             output: {
                 globals: {
                     react: 'React',
                     'react-dom': 'ReactDOM',
+                    'react/jsx-runtime': 'react/jsx-runtime',
                 },
             },
         },
