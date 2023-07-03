@@ -11,7 +11,7 @@ import { Tab, Tabs } from 'nextra-theme-docs';
 </div>
 
 -   ⚡️ **PERFORMANT**: every motion is done purely with CSS transforms, providing near-native UX.
--   🪶 **LIGHTWEIGHT**: **~36kb** uncompressed, **~11kb** gziped. **0 dependencies**.
+-   🪶 **LIGHTWEIGHT**: **~3.5kb** mifified UMD, **~2kb** gziped. **0 dependencies**.
 -   🧘 **MINIMALISTIC**: nothing redundant, yet everything you may need.
 -   ⚙️ **TYPED**: writen in TypeScript, so `.d.ts` file with prop and ref types included.
 
@@ -43,7 +43,8 @@ import { Tab, Tabs } from 'nextra-theme-docs';
 ```js
 import { useRef } from 'react';
 import BottomSheet from '@wldyslw/react-bottom-sheet';
-import '@wldyslw/react-bottom-sheet/lib/style.css'; // don't forget styles!
+// don't forget styles! If you use TailwindCSS, you can include package to config.content and save even more precious kilobytes!
+import '@wldyslw/react-bottom-sheet/lib/style.css';
 
 function App() {
     const sheetRef = useRef(null);
