@@ -20,7 +20,7 @@ const config: DocsThemeConfig = {
                 />
                 <link
                     rel="manifest"
-                    href={`${process.env.NEXT_PUBLIC_DOCS_BASE_PATH}/manifest.webmanifest`}
+                    href={`${process.env.NEXT_PUBLIC_DOCS_BASE_PATH}/site.webmanifest`}
                 />
             </>
         );
