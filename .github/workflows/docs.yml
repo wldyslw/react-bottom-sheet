@@ -20,10 +20,6 @@ concurrency:
     group: 'pages'
     cancel-in-progress: false
 
-defaults:
-    run:
-        working-directory: ./packages/docs
-
 jobs:
     # Build job
     build:
@@ -36,6 +32,7 @@ jobs:
               uses: actions/setup-node@v3
               with:
                   node-version: '16'
+                  cache: 'pnpm'
 
             - name: Install pnpm
               uses: pnpm/action-setup@v2
@@ -65,15 +62,20 @@ jobs:
                       ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
 
             - name: Install dependencies
-              run: pnpm install
+              run: pnpm install --frozen-lockfile
+
+            - name: Build @wldyslw/react-bottom-sheet package
+              working-directory: ./packages/react-bottom-sheet
+              run: pnpm build
 
             - name: Build & static HTML export with Next.js
+              working-directory: ./packages/docs
               run: pnpm build
 
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v1
               with:
-                  path: ./out
+                  path: ./packages/docs/out
 
     # Deployment job
     deploy:
