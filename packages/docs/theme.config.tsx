@@ -6,21 +6,21 @@ const config: DocsThemeConfig = {
             <>
                 <link
                     rel="icon"
-                    href={`${process.env.DOCS_BASE_PATH}/favicon.ico`}
+                    href={`${process.env.NEXT_PUBLIC_DOCS_BASE_PATH}/favicon.ico`}
                     sizes="any"
                 />
                 <link
                     rel="icon"
-                    href={`${process.env.DOCS_BASE_PATH}/icon.svg`}
+                    href={`${process.env.NEXT_PUBLIC_DOCS_BASE_PATH}/icon.svg`}
                     type="image/svg+xml"
                 />
                 <link
                     rel="apple-touch-icon"
-                    href={`${process.env.DOCS_BASE_PATH}/apple-touch-icon.png`}
+                    href={`${process.env.NEXT_PUBLIC_DOCS_BASE_PATH}/apple-touch-icon.png`}
                 />
                 <link
                     rel="manifest"
-                    href={`${process.env.DOCS_BASE_PATH}/manifest.webmanifest`}
+                    href={`${process.env.NEXT_PUBLIC_DOCS_BASE_PATH}/manifest.webmanifest`}
                 />
             </>
         );
@@ -28,7 +28,7 @@ const config: DocsThemeConfig = {
     logo: (
         <span className="inline-img font-mono">
             <img
-                src={`${process.env.DOCS_BASE_PATH}/favicon-32x32.png`}
+                src={`${process.env.NEXT_PUBLIC_DOCS_BASE_PATH}/favicon-32x32.png`}
                 alt="Project's logo represented by newspaper emoji"
             />
             <span className="ms-2">@wldyslw/react-bottom-sheet</span>

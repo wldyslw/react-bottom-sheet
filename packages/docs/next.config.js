@@ -8,7 +8,7 @@ const withNextra = nextra({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    basePath: process.env.DOCS_BASE_PATH,
+    basePath: process.env.NEXT_PUBLIC_DOCS_BASE_PATH,
     output: 'export',
     images: {
         unoptimized: true,

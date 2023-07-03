@@ -83,7 +83,7 @@ jobs:
 
             - name: Build & static HTML export with Next.js
               working-directory: ./packages/docs
-              run: echo "DOCS_BASE_PATH=/react-bottom-sheet" > .env.local && pnpm build
+              run: echo "NEXT_PUBLIC_DOCS_BASE_PATH=/react-bottom-sheet" > .env.local && pnpm build
 
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v1
