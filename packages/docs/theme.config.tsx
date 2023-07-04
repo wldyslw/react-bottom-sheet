@@ -28,7 +28,7 @@ const config: DocsThemeConfig = {
     logo: (
         <span className="inline-img font-mono">
             <img
-                src={`${process.env.NEXT_PUBLIC_DOCS_BASE_PATH}/favicon-32x32.png`}
+                src={`${process.env.NEXT_PUBLIC_DOCS_BASE_PATH}/favicon-16x16.png`}
                 alt="Project's logo represented by newspaper emoji"
             />
             <span className="ms-2">@wldyslw/react-bottom-sheet</span>

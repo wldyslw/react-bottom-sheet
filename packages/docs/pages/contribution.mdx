@@ -1,0 +1,59 @@
+# Contribution Guide
+
+Monorepository that holds the package consists of package itself and docs that you're reading.
+Here's described how you can deploy everything locally and start development.
+
+import { Callout } from 'nextra/components';
+
+<Callout type="info">
+    Both package and docs managed with [pnpm](https://pnpm.io/) and it's
+    [workspaces](https://pnpm.io/workspaces) feature. So first of all you should
+    install it.
+</Callout>
+
+## Package
+
+Bottom Sheet is built with [Vite](https://vitejs.dev/) so you can instantly preview results of your work in playground.
+To get started, go to package folder, install deps and run dev server:
+
+```sh
+cd ./packages/react-bottom-sheet
+pnpm install
+pnpm dev # Congrats! You can now visit playground, usually http://localhost:5173
+```
+
+Finally, you can build component for production:
+
+```sh
+pnpm build
+```
+
+Build results located in `./package/react-bottom-sheet/lib`.
+
+<Callout type="warning">
+    Don't forget to check the build, and preview component in the docs!
+    (described below)
+</Callout>
+
+## Docs
+
+Docs are created with [Nextra](https://nextra.site), framework built on [Next.js](https://nextjs.org).
+You can read Nextra's docs in order to catch up advanced topics, but if you want to introduce minon changes you can keep reading.
+
+As with core package, getting started is pretty trivial:
+
+```sh
+cd ./packages/docs
+pnpm install
+pnpm dev # http://localhost:3000 or similar should be avaliable for preview
+```
+
+Again, you can prerender docs and be sure that everything is fine:
+
+```sh
+pnpm build
+```
+
+## Pull Request Policy
+
+TBD, so feel free to do them freeform!

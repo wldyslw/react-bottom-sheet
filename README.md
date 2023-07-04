@@ -1,8 +1,11 @@
 # React Bottom Sheet Component
 
-![npm (scoped)](https://img.shields.io/npm/v/%40wldyslw/react-bottom-sheet)
-![npm bundle size (scoped)](https://img.shields.io/bundlephobia/min/%40wldyslw/react-bottom-sheet)
-![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/%40wldyslw/react-bottom-sheet)
+[![npm
+    (scoped)](https://img.shields.io/npm/v/%40wldyslw/react-bottom-sheet)](https://www.npmjs.com/package/@wldyslw/react-bottom-sheet)
+[![npm bundle size
+    (scoped)](https://img.shields.io/bundlephobia/min/%40wldyslw/react-bottom-sheet)](https://bundlephobia.com/package/@wldyslw/react-bottom-sheet)
+[![npm bundle size
+    (scoped)](https://img.shields.io/bundlephobia/minzip/%40wldyslw/react-bottom-sheet)](https://bundlephobia.com/package/@wldyslw/react-bottom-sheet)
 
 -   ⚡️ **PERFORMANT**: every motion is done purely with CSS transforms, providing near-native UX.
 -   🪶 **LIGHTWEIGHT**: **~3.5kb** mifified UMD, **~2kb** gziped. **0 dependencies**.

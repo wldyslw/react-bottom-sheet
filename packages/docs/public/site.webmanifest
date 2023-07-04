@@ -3,6 +3,8 @@
     "short_name": "Docs",
     "scope": "./",
     "start_url": "./",
+    "lang": "en",
+    "categories": ["developer", "developer tools", "development", "reference"],
     "icons": [
         {
             "src": "./android-chrome-192x192.png",
