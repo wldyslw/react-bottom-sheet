@@ -8,36 +8,11 @@ import GeneralExample from '@components/GeneralExample';
 
 ## Example's code
 
-```jsx filename="BottomSheetWrapper.tsx"
-// https://github.com/wldyslw/react-bottom-sheet/issues/4
-import { type Ref } from 'react';
-import BottomSheet, {
-    type BottomSheetRef,
-    type BottomSheetProps,
-} from '@wldyslw/react-bottom-sheet';
-import '@wldyslw/react-bottom-sheet/lib/style.css';
-
-const BottomSheetWrapper = ({
-    sheetRef,
-    ...props
-}: BottomSheetProps & { sheetRef?: Ref<BottomSheetRef> }) => {
-    return <BottomSheet {...props} ref={sheetRef} />;
-};
-
-export default BottomSheetWrapper;
-```
-
-```jsx filename="App.tsx"
-import dynamic from 'next/dynamic';
+```jsx
 import { useRef } from 'react';
-import { type BottomSheetRef } from '@wldyslw/react-bottom-sheet';
+import BottomSheet, { type BottomSheetRef } from '@wldyslw/react-bottom-sheet';
 
-// https://github.com/wldyslw/react-bottom-sheet/issues/4
-const DynamicSheet = dynamic(() => import('./BottomSheetWrapper'), {
-    ssr: false,
-});
-
-function General() {
+export default function General() {
     const sheetRef = (useRef < BottomSheetRef) | (null > null);
 
     return (
@@ -50,8 +25,8 @@ function General() {
             >
                 Open Sheet
             </button>
-            <DynamicSheet
-                sheetRef={sheetRef}
+            <BottomSheet
+                ref={sheetRef}
                 grabberVisible
                 detents={['50%', '90%']}
                 className="dark:bg-zinc-800"
@@ -77,7 +52,7 @@ function General() {
                 <div id="content" className="px-4">
                     <p>{text}</p>
                 </div>
-            </DynamicSheet>
+            </BottomSheet>
         </div>
     );
 }

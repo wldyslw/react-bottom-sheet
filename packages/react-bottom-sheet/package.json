@@ -28,15 +28,13 @@
     ],
     "type": "module",
     "scripts": {
-        "dev": "vite",
+        "dev": "vite --host",
         "build": "tsc && vite build",
         "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
     },
     "files": [
         "lib",
-        "src",
-        "README.md",
-        "LICENSE"
+        "src"
     ],
     "main": "./lib/react-bottom-sheet.umd.cjs",
     "module": "./lib/react-bottom-sheet.js",

@@ -8,7 +8,7 @@ import {
     type PointerEvent,
     type ReactNode,
     useImperativeHandle,
-    useLayoutEffect,
+    useEffect,
     useMemo,
 } from 'react';
 import { createPortal } from 'react-dom';
@@ -70,27 +70,47 @@ export interface BottomSheetProps {
      */
     largestUndimmedDetentIndex?: number;
     /**
-     * Additional class names that will be applied to the sheet
+     * Additional class names that will be applied to the sheet.
      */
     className?: string;
     /**
-     * Amount of pixels that sheet should be dragged before switching expanded state
+     * Amount of pixels that sheet should be dragged before switching expanded state.
      * @default 50
      */
     expansionSwitchThreshold?: number;
     /**
-     * Controls whether sheet persists on page or not
+     * Whether sheet persists on page and can be dissmissed or not.
      * @default false
      */
     permanent?: boolean;
     /**
-     * A Boolean value that determines whether the sheet shows a grabber at the top.
+     * Whether the sheet shows a grabber at the top.
      *
      * NOTE: while this component is generally developed for mobile experiences,
      * it's also possible to drag grabber on desktops to expand/collapse sheet.
      * @default false
      */
     grabberVisible?: boolean;
+    /**
+     * Custom DOM node to render bottom sheet into.
+     *
+     * Passed directly to `createPortal`.
+     *
+     * @default document.body
+     */
+    domNode?: Element | DocumentFragment;
+    /**
+     * Renders component without a portal.
+     *
+     * By default, bottom sheet is rendered inside a portal, thus only on client side in SSR/SSG environments
+     * (because React's `createPortal` cannot be called server-side).
+     *
+     * If you want to heavily customize rendering behaviour, like allowing it to bypass mentioned limitation,
+     * you can pass this prop.
+     *
+     * @default false
+     */
+    standalone?: boolean;
 }
 
 const defaultDetents = ['50%', '97%'];
@@ -115,6 +135,8 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
         expansionSwitchThreshold = 50,
         permanent = false,
         grabberVisible = false,
+        domNode,
+        standalone = false,
     }: BottomSheetProps,
     ref
 ) {
@@ -154,15 +176,17 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
     const scrollContainerRef = useRef<HTMLDivElement | null>(null);
     const sheetContainerRef = useRef<HTMLDivElement | null>(null);
 
-    useLayoutEffect(() => {
-        const resizeListener = throttle(() => {
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const resizeListener = throttle(() => {
+                setViewportHeight(window.innerHeight);
+            }, 100);
             setViewportHeight(window.innerHeight);
-        }, 100);
-        setViewportHeight(window.innerHeight);
-        window.addEventListener('resize', resizeListener);
-        return () => {
-            window.removeEventListener('resize', resizeListener);
-        };
+            window.addEventListener('resize', resizeListener);
+            return () => {
+                window.removeEventListener('resize', resizeListener);
+            };
+        }
     }, []);
 
     const handleDissmiss = useCallback(() => {
@@ -285,7 +309,7 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
 
     const resultingTransform = transform + (opened ? -currentDetent : 0);
 
-    return createPortal(
+    const content = (
         <div
             ref={sheetContainerRef}
             id="bottom-sheet-container"
@@ -313,7 +337,9 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
                     transform: `translate3d(0, calc(100% + ${resultingTransform}px), 0)`,
                 }}
                 className={`${
-                    transform === 0 ? 'bottom-sheet-transform' : ''
+                    transform === 0
+                        ? 'transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]'
+                        : ''
                 } pointer-events-auto fixed inset-x-0 mx-auto flex w-full max-w-3xl shrink-0 flex-col rounded-t-2xl bg-white drop-shadow-xl will-change-transform ${className}`}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
@@ -336,9 +362,11 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
                         marginBottom: `${largetsDetent + resultingTransform}px`,
                     }}
                     ref={scrollContainerRef}
-                    // TODO: apply bottom-sheet-transform only when sheet is collapsing
+                    // TODO: apply easingClasses only when sheet is collapsing
                     className={`${
-                        transform === 0 ? 'bottom-sheet-transform' : ''
+                        transform === 0
+                            ? 'transition-[margin-bottom] duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]'
+                            : ''
                     } h-full ${grabberVisible ? '' : 'pt-3'} ${
                         transform !== 0
                             ? 'overscroll-none'
@@ -348,9 +376,25 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
                     {children}
                 </div>
             </div>
-        </div>,
-        document.body
+        </div>
     );
+
+    const [isClientRender, setIsClientRender] = useState(false);
+
+    useEffect(() => {
+        if (!isClientRender && !standalone) {
+            setIsClientRender(true);
+        }
+    }, [isClientRender, standalone]);
+
+    if (standalone) {
+        return content;
+    }
+
+    // only return content during client renders (with SSR - the second and subsequent ones)
+    return isClientRender
+        ? createPortal(content, domNode ?? document.body)
+        : null;
 });
 
 const MemoizedSheet = memo(Sheet);

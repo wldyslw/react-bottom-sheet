@@ -1,11 +1,5 @@
-import dynamic from 'next/dynamic';
 import { useRef } from 'react';
-import { type BottomSheetRef } from '@wldyslw/react-bottom-sheet';
-
-// https://github.com/wldyslw/react-bottom-sheet/issues/4
-const DynamicSheet = dynamic(() => import('./BottomSheetWrapper'), {
-    ssr: false,
-});
+import BottomSheet, { type BottomSheetRef } from '@wldyslw/react-bottom-sheet';
 
 const text = [
     `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -79,8 +73,8 @@ export default function General() {
             >
                 Open Sheet
             </button>
-            <DynamicSheet
-                sheetRef={sheetRef}
+            <BottomSheet
+                ref={sheetRef}
                 grabberVisible
                 detents={['50%', '90%']}
                 className="dark:bg-zinc-800"
@@ -106,7 +100,7 @@ export default function General() {
                 <div id="content" className="px-4">
                     <p>{text}</p>
                 </div>
-            </DynamicSheet>
+            </BottomSheet>
         </div>
     );
 }
