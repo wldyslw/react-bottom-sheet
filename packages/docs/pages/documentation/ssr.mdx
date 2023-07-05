@@ -1,3 +1,115 @@
 # Usage in SSR/SSG Environments
 
-TBD
+import { Callout } from 'nextra/components';
+
+<Callout type="info">
+    **TL;DR** You don't need a special treatment *to just make it work* in
+    SSR/SSG environments!
+</Callout>
+
+Internally, Bottom Sheet uses React's [`createPortal`](https://react.dev/reference/react-dom/createPortal),
+thus disabling ability to render server-side without a workaround.
+If you don't need it anyway, then you can just drop the component into your components tree and use it.
+Otherwise I prepared a recipies for you.
+
+## Rendering Without a Portal
+
+For a number of cases, including the most straightfowrward way of getting it render server-side,
+you can simply get rid of the portal by passing `standalone` prop.
+
+```jsx
+<BottomSheet standalone />
+```
+
+This way, you have to manually think of the placement of the bottom sheet keeping in mind a few moments:
+
+-   Sheet has [`position: fixed`](https://developer.mozilla.org/en-US/docs/Web/CSS/position#fixed),
+    and must be positioned relative to the initial viewport (i.e. be full-screen stretched).
+    This is important as each detent, defined as percentage, is calculated relative to `window.innerHeight`.
+    Feel free to fill in an issue, if you have concerns regarding this behaviour.
+-   You will be in charge of assigning correct `z-index` so bottom sheet can be accessed and other `fixed` elements won't overlay it.
+
+## Using Third-Party Solutions
+
+If you have no choice but to keep sheet's rendering within portal, you can use third-party libraries that can insert portals server-side.
+Next.js team prepared a number of great examples,
+[including the very similar one](https://github.com/vercel/next.js/tree/canary/examples/with-portals-ssr),
+where they render a modal on server.
+
+According to it, we can do the following. The `standalone` prop used here again, so you can wrap bottom sheet in a custom portal.
+
+```jsx
+import BottomSheet from '@wldyslw/react-bottom-sheet';
+import { UniversalPortal } from '@jesstelford/react-portal-universal';
+
+function App() {
+    return (
+        <UniversalPortal selector="body">
+            <BottomSheet standalone />
+        </UniversalPortal>
+    );
+}
+```
+
+## Dynamic Loading
+
+There's another approach to mentioned `createPortal`'s limitation.
+If it only rendered on client, why should it be even included in initial bundle?
+
+### Next.js and `dynamic()`
+
+You may think of something like using Next's
+[`dynamic()`](https://nextjs.org/docs/pages/building-your-application/optimizing/lazy-loading#with-no-ssr)
+function with `ssr: false` parameter:
+
+```jsx
+const LazySheet = dynamic(() => import('@wldyslw/react-bottom-sheet'), {
+    ssr: false,
+});
+
+function App() {
+    return <LazySheet />;
+}
+```
+
+But it has very frustrating issue: `dynamic` will omit original `ref` handler and replace it with custom one,
+so you won't be able to open sheet programmatically, for instance.
+[Unfortunately, it won't be resolved](https://github.com/vercel/next.js/issues/4957#issuecomment-413841689).
+
+If you want to use `dynamic()` anyway, I advise you to create a wrapper around `BottomSheet` component and then use it:
+
+```jsx filename="BottomSheetWrapper.tsx"
+import { type Ref } from 'react';
+import BottomSheet, {
+    type BottomSheetRef,
+    type BottomSheetProps,
+} from '@wldyslw/react-bottom-sheet';
+import '@wldyslw/react-bottom-sheet/lib/style.css';
+
+const BottomSheetWrapper = ({
+    sheetRef,
+    ...props
+}: BottomSheetProps & { sheetRef?: Ref<BottomSheetRef> }) => {
+    return <BottomSheet {...props} ref={sheetRef} />;
+};
+
+export default BottomSheetWrapper;
+```
+
+```jsx filename="App.tsx"
+import dynamic from 'next/dynamic';
+import { useRef } from 'react';
+import { type BottomSheetRef } from '@wldyslw/react-bottom-sheet';
+
+const LazySheet = dynamic(() => import('./BottomSheetWrapper'), {
+    ssr: false,
+});
+
+function App() {
+    return <LazySheet />;
+}
+```
+
+### React's `<Suspense/>` and `lazy()`
+
+I haven't _yet_ tested it with `React.Suspense`/`React.lazy`, but hope that will do it soon!
