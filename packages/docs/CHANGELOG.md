@@ -1,5 +1,11 @@
 # @wldyslw/react-bottom-sheet-docs
 
+## 0.0.4
+
+### Patch Changes
+
+-   9ba38a1: A note about SSR/SSG envs
+
 ## 0.0.3
 
 ### Patch Changes
