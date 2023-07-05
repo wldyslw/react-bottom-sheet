@@ -9,8 +9,9 @@ import { Callout } from 'nextra/components';
 
 Internally, Bottom Sheet uses React's [`createPortal`](https://react.dev/reference/react-dom/createPortal),
 thus disabling ability to render server-side without a workaround.
-If you don't need it anyway, then you can just drop the component into your components tree and use it.
-Otherwise I prepared a recipies for you.
+
+If you don't need it anyway, then you can just drop BottomSheet into your component tree and use it rendered on client only.
+Otherwise, if you strictly need to pre-render, I prepared a recipies for you.
 
 ## Rendering Without a Portal
 
