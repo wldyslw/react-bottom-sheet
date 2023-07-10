@@ -197,10 +197,7 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
     }, [permanent]);
 
     const handleGestureStart = useCallback((y: number) => {
-        const scrollTop = scrollContainerRef.current?.scrollTop;
-        if (scrollTop !== undefined && scrollTop <= 0) {
-            setOrigin(y);
-        }
+        setOrigin(y);
     }, []);
 
     const handleGestureMove = useCallback(
@@ -254,8 +251,11 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
 
     const handleTouchStart = useCallback(
         (e: TouchEvent) => {
-            const y = e.touches[0].pageY;
-            handleGestureStart(y);
+            const scrollTop = scrollContainerRef.current?.scrollTop;
+            if (scrollTop !== undefined && scrollTop <= 0) {
+                const y = e.touches[0].pageY;
+                handleGestureStart(y);
+            }
         },
         [handleGestureStart]
     );
