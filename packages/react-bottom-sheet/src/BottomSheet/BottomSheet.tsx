@@ -140,8 +140,17 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
     }: BottomSheetProps,
     ref
 ) {
-    const [currentDetentIndex, setCurrentDetendIndex] = useState(0);
+    const [currentDetentIndex, setCurrentDetentIndex] = useState(0);
+    const [prevDetentIndex, setPrevDetentIndex] = useState(0);
     const [viewportHeight, setViewportHeight] = useState(0);
+
+    const updateDetentIndex = useCallback<typeof setCurrentDetentIndex>(
+        (value) => {
+            setCurrentDetentIndex(value);
+            setPrevDetentIndex(currentDetentIndex);
+        },
+        [currentDetentIndex]
+    );
 
     const parsedDetents = useMemo(() => {
         return detents
@@ -191,10 +200,10 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
 
     const handleDissmiss = useCallback(() => {
         if (!permanent) {
-            setCurrentDetendIndex(0);
+            updateDetentIndex(0);
             open(false);
         }
-    }, [permanent]);
+    }, [permanent, updateDetentIndex]);
 
     const handleGestureStart = useCallback((y: number) => {
         setOrigin(y);
@@ -204,12 +213,7 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
         (y: number) => {
             if (origin !== null) {
                 const delta = y - origin;
-                const isSingleDetent = parsedDetents.length === 1;
-                if (isSingleDetent) {
-                    setTransform(
-                        delta >= 0 && !permanent ? delta : inertialize(delta)
-                    );
-                } else if (isLargestDetent) {
+                if (isLargestDetent) {
                     setTransform(delta >= 0 ? delta : 0);
                 } else if (isSmallestDetent) {
                     setTransform(
@@ -220,13 +224,7 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
                 }
             }
         },
-        [
-            parsedDetents.length,
-            isLargestDetent,
-            isSmallestDetent,
-            origin,
-            permanent,
-        ]
+        [isLargestDetent, isSmallestDetent, origin, permanent]
     );
 
     const handleGestureEnd = useCallback(() => {
@@ -234,15 +232,21 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
             if (!permanent && isSmallestDetent) {
                 open(false);
             } else {
-                setCurrentDetendIndex((i) => i - 1);
+                updateDetentIndex((i) => i - 1);
                 scrollContainerRef.current?.scrollTo(0, 0);
             }
         } else if (transform < -expansionSwitchThreshold) {
-            setCurrentDetendIndex((i) => i + 1);
+            updateDetentIndex((i) => i + 1);
         }
         setOrigin(null);
         setTransform(0);
-    }, [expansionSwitchThreshold, isSmallestDetent, permanent, transform]);
+    }, [
+        expansionSwitchThreshold,
+        isSmallestDetent,
+        permanent,
+        transform,
+        updateDetentIndex,
+    ]);
 
     const handleGestureCancel = useCallback(() => {
         setOrigin(null);
@@ -292,22 +296,26 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
                     open(false);
                 },
                 expand() {
-                    setCurrentDetendIndex((v) =>
+                    updateDetentIndex((v) =>
                         v < parsedDetents.length - 1 ? v + 1 : v
                     );
                 },
                 expandToIndex(i) {
-                    setCurrentDetendIndex(i);
+                    updateDetentIndex(i);
                 },
                 collapse() {
-                    setCurrentDetendIndex((v) => (v > 0 ? v - 1 : v));
+                    updateDetentIndex((v) => (v > 0 ? v - 1 : v));
                 },
             };
         },
-        [parsedDetents.length]
+        [parsedDetents.length, updateDetentIndex]
     );
 
-    const resultingTransform = transform + (opened ? -currentDetent : 0);
+    // Math.max restricst expansion up to largest detent
+    const resultingTransform = Math.max(
+        transform + (opened ? -currentDetent : 0),
+        -largetsDetent
+    );
 
     const content = (
         <div
@@ -336,11 +344,11 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
                     bottom: 0,
                     transform: `translate3d(0, calc(100% + ${resultingTransform}px), 0)`,
                 }}
-                className={`${
+                className={`pointer-events-auto fixed inset-x-0 mx-auto flex w-full max-w-3xl shrink-0 flex-col rounded-t-2xl bg-white drop-shadow-xl will-change-transform ${
                     transform === 0
                         ? 'transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]'
                         : ''
-                } pointer-events-auto fixed inset-x-0 mx-auto flex w-full max-w-3xl shrink-0 flex-col rounded-t-2xl bg-white drop-shadow-xl will-change-transform ${className}`}
+                } ${className}`}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleGestureEnd}
@@ -362,16 +370,18 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
                         marginBottom: `${largetsDetent + resultingTransform}px`,
                     }}
                     ref={scrollContainerRef}
-                    // TODO: apply easingClasses only when sheet is collapsing
-                    className={`${
-                        transform === 0
+                    // Easing is only applied when sheet is collapsing
+                    className={`h-full overflow-y-auto ${
+                        opened &&
+                        transform === 0 &&
+                        prevDetentIndex > currentDetentIndex
                             ? 'transition-[margin-bottom] duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]'
                             : ''
-                    } h-full ${grabberVisible ? '' : 'pt-3'} ${
+                    } ${grabberVisible ? '' : 'pt-3'} ${
                         transform !== 0
                             ? 'overscroll-none'
                             : 'overscroll-contain'
-                    } ${isLargestDetent ? '' : 'touch-none'} overflow-y-auto`}
+                    } ${isLargestDetent ? '' : 'touch-none'}`}
                 >
                     {children}
                 </div>
