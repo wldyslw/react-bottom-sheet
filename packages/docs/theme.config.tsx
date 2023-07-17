@@ -1,6 +1,36 @@
-import { DocsThemeConfig } from 'nextra-theme-docs';
+import { DocsThemeConfig, useConfig } from 'nextra-theme-docs';
 
 const config: DocsThemeConfig = {
+    useNextSeoProps() {
+        const { frontMatter, title, logoLink } = useConfig();
+
+        const description =
+            frontMatter.description ??
+            'React component for iOS- and Android-like bottom sheet';
+
+        return {
+            titleTemplate: '%s – React Bottom Sheet',
+            description,
+            openGraph: {
+                url: logoLink as string,
+                title: title ?? '@wldyslw/react-bottom-sheet',
+                description,
+                images: [
+                    {
+                        url: `${process.env.NEXT_PUBLIC_DOCS_BASE_PATH}/screenshot.png`,
+                        width: 1024,
+                        height: 512,
+                        alt: "Screenshot of sheet's example usage",
+                        type: 'image/png',
+                    },
+                ],
+            },
+            twitter: {
+                cardType: 'summary_large_image',
+                site: '@wldyslw',
+            },
+        };
+    },
     head: () => {
         return (
             <>
@@ -26,7 +56,7 @@ const config: DocsThemeConfig = {
         );
     },
     logo: (
-        <span className="inline-img font-mono">
+        <span className="inline-img font-mono text-xs font-semibold md:text-base">
             <img
                 src={`${process.env.NEXT_PUBLIC_DOCS_BASE_PATH}/favicon-16x16.png`}
                 alt="Project's logo represented by newspaper emoji"
@@ -40,7 +70,27 @@ const config: DocsThemeConfig = {
     docsRepositoryBase:
         'https://github.com/wldyslw/react-bottom-sheet/tree/main/packages/docs',
     footer: {
-        text: '@wldyslw/react-bottom-sheet | Built with Nextra',
+        text: (
+            <span>
+                <a
+                    className="nx-text-primary-600 underline"
+                    href="https://github.com/wldyslw/react-bottom-sheet"
+                    target="_blank"
+                >
+                    @wldyslw/react-bottom-sheet
+                </a>
+                <span className="mx-3 opacity-50">|</span>
+                Built with{' '}
+                <a
+                    className="nx-text-primary-600 underline"
+                    href="https://nextra.site/"
+                    target="_blank"
+                >
+                    Nextra
+                </a>{' '}
+                <span className="mx-3 opacity-50">|</span> MIT License
+            </span>
+        ),
     },
 };
 

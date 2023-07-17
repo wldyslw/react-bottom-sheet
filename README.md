@@ -7,6 +7,8 @@
 [![npm bundle size
     (scoped)](https://img.shields.io/bundlephobia/minzip/%40wldyslw/react-bottom-sheet)](https://bundlephobia.com/package/@wldyslw/react-bottom-sheet)
 
+![Screenshot of sheet's example usage](./promo/screenshot.png)
+
 -   ⚡️ **PERFORMANT**: every motion is done purely with CSS transforms, providing near-native UX.
 -   🪶 **LIGHTWEIGHT**: **~3.5kb** mifified UMD, **~2kb** gziped. **0 dependencies**.
 -   🧘 **MINIMALISTIC**: nothing redundant, yet everything you may need.
