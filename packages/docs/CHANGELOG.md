@@ -1,5 +1,14 @@
 # @wldyslw/react-bottom-sheet-docs
 
+## 0.0.5
+
+### Patch Changes
+
+-   a2d3790: SEO applied for docs, including fix for #6
+-   Updated dependencies [2741ee6]
+-   Updated dependencies [3e7451b]
+    -   @wldyslw/react-bottom-sheet@0.3.1
+
 ## 0.0.4
 
 ### Patch Changes

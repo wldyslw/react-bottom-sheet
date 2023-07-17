@@ -1,5 +1,15 @@
 # @wldyslw/react-bottom-sheet
 
+## 0.3.1
+
+### Patch Changes
+
+-   2741ee6: Sheet can now be expanded on desktop if scroll container has non-zero scroll.
+    Mobile behaviour left unchanged.
+    Resolves #3 (https://github.com/wldyslw/react-bottom-sheet/issues/3)
+-   3e7451b: Sheet's overdrag is restricted up to largest detent, resolving #1 (https://github.com/wldyslw/react-bottom-sheet/issues/1)
+    Also, bottom margin that allows scroll on non-largest detents (primarly on desktop) now receives easing (css transition) only when sheet collapses
+
 ## 0.3.0
 
 ### Minor Changes
