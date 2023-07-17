@@ -1,103 +1,110 @@
 name: Deploy docs to GH Pages
 
 on:
-    # Runs on pushes targeting the default branch
-    push:
-        branches: ['main']
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ['main']
 
-    # Allows you to run this workflow manually from the Actions tab
-    workflow_dispatch:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-    contents: read
-    pages: write
-    id-token: write
+  contents: read
+  pages: write
+  id-token: write
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
-    group: 'pages'
-    cancel-in-progress: false
+  group: 'pages'
+  cancel-in-progress: false
 
 jobs:
-    # Build job
-    build:
-        runs-on: 'ubuntu-latest'
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v3
+  # Build docs and package
+  build:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-            - name: Setup Node
-              uses: actions/setup-node@v3
-              with:
-                  node-version: '16'
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
 
-            - name: Install pnpm
-              uses: pnpm/action-setup@v2
-              id: pnpm-install
-              with:
-                  version: 8
-                  run_install: false
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        id: pnpm-install
+        with:
+          version: 8
+          run_install: false
 
-            - name: Setup Pages
-              uses: actions/configure-pages@v3
-              with:
-                  # Automatically inject basePath in your Next.js configuration file and disable
-                  # server side image optimization (https://nextjs.org/docs/api-reference/next/image#unoptimized).
-                  #
-                  # You may remove this line if you want to manage the configuration yourself.
-                  static_site_generator: next
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
 
-            - name: Get pnpm store directory
-              id: pnpm-cache
-              shell: bash
-              run: |
-                  echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-            - name: Setup pnpm cache
-              uses: actions/cache@v3
-              with:
-                  path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-                  key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-                  restore-keys: |
-                      ${{ runner.os }}-pnpm-store-
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
-            - name: Setup Next.js cache
-              uses: actions/cache@v3
-              with:
-                  path: |
-                      .next/cache
-                  # Generate a new cache whenever packages or source files change.
-                  key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
-                  # If source files changed but packages didn't, rebuild from a prior cache.
-                  restore-keys: |
-                      ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
+      - name: Setup Next.js cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            .next/cache
+          # Generate a new cache whenever packages or source files change.
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          # If source files changed but packages didn't, rebuild from a prior cache.
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
 
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-            - name: Build @wldyslw/react-bottom-sheet package
-              working-directory: ./packages/react-bottom-sheet
-              run: pnpm build
+      - name: Build @wldyslw/react-bottom-sheet package
+        working-directory: ./packages/react-bottom-sheet
+        run: pnpm build
 
-            - name: Build & static HTML export with Next.js
-              working-directory: ./packages/docs
-              run: echo "NEXT_PUBLIC_DOCS_BASE_PATH=/react-bottom-sheet" > .env.local && pnpm build
+      - name: Copy README from root workspace to package
+        run: cp ./README.md ./packages/react-bottom-sheet/
 
-            - name: Upload artifact
-              uses: actions/upload-pages-artifact@v1
-              with:
-                  path: ./packages/docs/out
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: react-bottom-sheet
+          path: |
+            ./package/react-bottom-sheet/lib
+            ./package/react-bottom-sheet/README.md
+            ./package/react-bottom-sheet/LICENSE
+            ./package/react-bottom-sheet/package.json
 
-    # Deployment job
-    deploy:
-        environment:
-            name: github-pages
-            url: ${{ steps.deployment.outputs.page_url }}
-        runs-on: ubuntu-latest
-        needs: build
-        steps:
-            - name: Deploy to GitHub Pages
-              id: deployment
-              uses: actions/deploy-pages@v2
+      - name: Build & static HTML export with Next.js
+        working-directory: ./packages/docs
+        run: echo "NEXT_PUBLIC_DOCS_BASE_PATH=/react-bottom-sheet" > .env.local && pnpm build
+
+      - name: Upload docs artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./packages/docs/out
+
+  # Deploy docs
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2

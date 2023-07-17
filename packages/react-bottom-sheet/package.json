@@ -33,8 +33,7 @@
         "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
     },
     "files": [
-        "lib",
-        "src"
+        "lib"
     ],
     "main": "./lib/react-bottom-sheet.umd.cjs",
     "module": "./lib/react-bottom-sheet.js",

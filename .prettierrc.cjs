@@ -4,4 +4,12 @@ module.exports = {
     tabWidth: 4,
     semi: true,
     singleQuote: true,
+    overrides: [
+        {
+            files: '*.yml',
+            options: {
+                tabWidth: 2,
+            },
+        },
+    ],
 };
