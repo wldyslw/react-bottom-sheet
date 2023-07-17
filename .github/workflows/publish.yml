@@ -83,10 +83,10 @@ jobs:
         with:
           name: react-bottom-sheet
           path: |
-            ./package/react-bottom-sheet/lib
-            ./package/react-bottom-sheet/README.md
-            ./package/react-bottom-sheet/LICENSE
-            ./package/react-bottom-sheet/package.json
+            ./packages/react-bottom-sheet/lib
+            ./packages/react-bottom-sheet/README.md
+            ./packages/react-bottom-sheet/LICENSE
+            ./packages/react-bottom-sheet/package.json
 
       - name: Build & static HTML export with Next.js
         working-directory: ./packages/docs
