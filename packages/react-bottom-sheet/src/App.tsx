@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import BottomSheet, { BottomSheetRef } from './BottomSheet/BottomSheet';
+import BottomSheet, { BottomSheetRef } from './BottomSheet';
 import './index.css';
 
 const text = [

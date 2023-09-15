@@ -20,7 +20,7 @@ export default defineConfig({
         lib: {
             name: 'BottomSheet',
             fileName: 'react-bottom-sheet',
-            entry: resolve(__dirname, 'src/BottomSheet/main.ts'),
+            entry: resolve(__dirname, 'src/BottomSheet/index.ts'),
         },
         rollupOptions: {
             external: ['react', 'react/jsx-runtime', 'react-dom'],

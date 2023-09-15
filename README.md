@@ -46,6 +46,13 @@ function App() {
 
 You can check API Reference as well as examples at official [docs page](https://wldyslw.github.io/react-bottom-sheet)
 
+# Appreciations
+
+-   Some project solutions heavily inspired by [stipsan's react-spring-bottom-sheet](https://github.com/stipsan/react-spring-bottom-sheet).
+    Despite being no longer actively maintained, this project is still in order of magnitude more complex and mature than mine.
+
+-   A11y improvements wouldn't be possible without [KittyGiraudel's a11y-dialog package](https://github.com/KittyGiraudel/a11y-dialog).
+
 # License
 
 MIT
