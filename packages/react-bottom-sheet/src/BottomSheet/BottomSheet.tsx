@@ -13,6 +13,7 @@ import {
 import { createPortal } from 'react-dom';
 
 import throttle from './throttle';
+import trapFocus from './trapFocus';
 import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
 
 import './index.css';
@@ -215,6 +216,23 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
         [parsedDetents.length, updateDetentIndex]
     );
 
+    useEffect(() => {
+        const keyDownListener = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                open(false);
+            }
+            if (event.key === 'Tab' && sheetContainerRef.current) {
+                trapFocus(sheetContainerRef.current, event);
+            }
+        };
+        if (opened) {
+            window.addEventListener('keydown', keyDownListener);
+        }
+        return () => {
+            window.removeEventListener('keydown', keyDownListener);
+        };
+    }, [opened]);
+
     // Math.max restricst expansion up to largest detent
     const resultingTransform = Math.max(
         transform + (opened ? -currentDetent : 0),
@@ -240,6 +258,7 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
             ></div>
             <div
                 aria-modal
+                tabIndex={-1}
                 role="dialog"
                 style={{
                     // TODO: support overdrag above largest detent. Minimum solution (works choppy on iOS):
@@ -270,6 +289,7 @@ const Sheet = forwardRef<BottomSheetRef, BottomSheetProps>(function BottomSheet(
                 </div>
                 <div
                     id="bottom-sheet-content"
+                    tabIndex={-1} // TODO: investigate why this div focuses without negative tabindex
                     style={{
                         marginBottom: `${largetsDetent + resultingTransform}px`,
                     }}
