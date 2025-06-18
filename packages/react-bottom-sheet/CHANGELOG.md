@@ -1,5 +1,15 @@
 # @wldyslw/react-bottom-sheet
 
+## 0.4.0
+
+### Minor Changes
+
+-   ecbbdb5: Keyboard controls introduced: `Esc` key closes sheet, focus persists within it when user uses `Tab` key. Appreciations section expanded
+
+### Patch Changes
+
+-   e1e8c77: Type definitions moved to separate file; `scrollContainerRef` handle now receives ref, not DOM node
+
 ## 0.3.1
 
 ### Patch Changes
