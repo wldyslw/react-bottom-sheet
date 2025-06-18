@@ -34,14 +34,14 @@ jobs:
           node-version: '22'
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         id: pnpm-install
         with:
           version: 8
           run_install: false
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Get pnpm store directory
         id: pnpm-cache
@@ -93,7 +93,7 @@ jobs:
         run: echo "NEXT_PUBLIC_DOCS_BASE_PATH=/react-bottom-sheet" > .env.local && pnpm build
 
       - name: Upload docs artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./packages/docs/out
 
@@ -107,4 +107,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
