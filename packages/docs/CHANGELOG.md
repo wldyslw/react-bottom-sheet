@@ -1,5 +1,14 @@
 # @wldyslw/react-bottom-sheet-docs
 
+## 0.0.6
+
+### Patch Changes
+
+-   ecbbdb5: Keyboard controls introduced: `Esc` key closes sheet, focus persists within it when user uses `Tab` key. Appreciations section expanded
+-   Updated dependencies [e1e8c77]
+-   Updated dependencies [ecbbdb5]
+    -   @wldyslw/react-bottom-sheet@0.4.0
+
 ## 0.0.5
 
 ### Patch Changes

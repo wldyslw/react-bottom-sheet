@@ -1,6 +1,6 @@
 {
     "name": "@wldyslw/react-bottom-sheet-docs",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "scripts": {
         "dev": "next dev",
         "build": "next build",
