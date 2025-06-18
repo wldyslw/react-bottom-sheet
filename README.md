@@ -10,7 +10,7 @@
 ![Screenshot of sheet's example usage](./promo/screenshot.png)
 
 -   ⚡️ **PERFORMANT**: every motion is done purely with CSS transforms, providing near-native UX.
--   🪶 **LIGHTWEIGHT**: **~3.5kb** mifified UMD, **~2kb** gziped. **0 dependencies**.
+-   🪶 **LIGHTWEIGHT**: **~4.6kb** mifified UMD, **~2.1kb** gziped. **0 dependencies**.
 -   🧘 **MINIMALISTIC**: nothing redundant, yet everything you may need.
 -   ⚙️ **TYPED**: writen in TypeScript, so `.d.ts` file with prop and ref types included!
 
